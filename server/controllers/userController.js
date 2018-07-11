@@ -1,13 +1,12 @@
+const config = require('../config/config');
 const db = require('../models');
-const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const userController = {};
 
 
 /// SIGN UP / REGISTER
-
 userController.register = (req, res) => {
-
     db.User.find( { $or: [{email: req.body.email }, { username: req.body.username }] })
     .exec()
     .then( (user) => {
@@ -17,72 +16,41 @@ userController.register = (req, res) => {
                 message: "email or username already taken"
             });
         } else {
-            bcrypt.hash(req.body.password, 10, (err, hash) => {
-                const { username, email, firstName, lastName } = req.body;
-                if (err) {
-                    console.log('fail');
+                const { username, email, password, firstName, lastName } = req.body;
+
+                const user = new db.User({
+                    username,
+                    password,
+                    email,
+                    firstName,
+                    lastName
+                });
+    
+                user
+                .save()
+                .then( (newUser) => {
+                    console.log('user saved');
+                    res.status(200).json({
+                        success: true,
+                        data: newUser
+                    });
+                })
+                .catch((err) => {
                     res.status(500).json({
-                        message: 'err'
+                        message: err.message
                     });
-                } else {
-                    const user = new db.User({
-                        //_id,
-                        username,
-                        password: hash,
-                        email,
-                        firstName,
-                        lastName
-                    });
-        
-                    user
-                    .save()
-                    .then( (newUser) => {
-                        console.log('user saved');
-                        res.status(200).json({
-                            success: true,
-                            data: newUser
-                        });
-                    });
-        
-                }
-            });
-        };
-    });
+                });
+            }
+    })
+    .catch((err) => {
+        res.status(500).json({
+            message: err.message
+        });
+    })
 };
 
 
 /// LOGIN / SIGN IN
-/*
-userController.login = async (req, res) => {
-    try {
-        const user = await db.User.findOne( { $or: [{email: req.body.email }, { username: req.body.username }] }).exec();
-        if (!user) {
-            return res.status(401).json({
-                message: "invalid username or email"
-            });
-        }
-
-        const match = await bcrypt.compare(req.body.password, user.password);
-
-        if (match) {
-            console.log('password correct');
-            res.status(200).json({
-                message: 'login success'
-            });
-        } else {
-            console.log('password fail');
-            res.status(401).json({
-                message: 'incorrect password'
-            });
-        };
-
-    } catch (err) {
-        return res.status(500).json({
-            message: err
-        });
-    }
-
-    */
 userController.login = (req, res) => {
     db.User.findOne( { $or: [{email: req.body.email }, { username: req.body.username }] })
     .exec()
@@ -94,7 +62,7 @@ userController.login = (req, res) => {
         } else {
             console.log('user found, checking password');
 
-            bcrypt.compare(req.body.password, user.password, (err, result) => {
+            db.User.comparePassword(req.body.password, user.password, (err, result) => {
                 if (err) {
                     res.status(500).json({
                         message: err
@@ -108,8 +76,12 @@ userController.login = (req, res) => {
                 }
                 else if (result){
                     console.log('password correct');
+
+                    const returnedToken = jwt.sign( { id: user._id }, config.jwt.secret, { expiresIn: '1h'} );
+
                     res.status(200).json({
-                        message: 'login success'
+                        message: 'login success',
+                        token: returnedToken
                     });
                 };
             });

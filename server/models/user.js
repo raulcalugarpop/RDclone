@@ -1,33 +1,70 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const { Schema } = mongoose;
 
-
 const userSchema = new Schema({
-    //_id: mongoose.Schema.Types.ObjectId,
     username: {
         type: String,
-        //required: true,
+        required: true,
         minlength: [3, 'Username must be 3 characters'],
-        unique: true },
+        unique: true
+    },
     email: {
         type: String,
-        //required: true,
+        required: true,
         unique: true,
-        match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/ },
+        match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
+    },
     password: {
         type: String,
-        //required: true,
-        minlength: [5, 'Password must be 5 characters']},
+        required: true,
+        minlength: [5, 'Password must be 5 characters']
+    },
     firstName: {
-        type: String },
-        //required: true },
+        type: String,
+        required: true
+    },
     lastName: {
-        type: String },
-        //required: true },
+        type: String,
+        required: true
+    },
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user'
+    },
     createdAt: { type: Date, default: Date.now },
     isDeleted: { type: Boolean, default: false }
 });
 
+userSchema.pre('save', function (next) {
+    let user = this;
+
+    if (!user.isModified('password')) {
+        return next();
+    }
+
+    bcrypt.hash(user.password, 10, (err, hash) => {
+        if (err) {
+            next(err);
+        } else {
+            user.password = hash;
+            next();
+        }
+    });
+});
+
 const User = mongoose.model('User', userSchema);
+
+User.comparePassword = (password, hash, callback) => {
+    bcrypt.compare(password, hash, (err, result) => {
+        if (err) {
+            callback(err);
+        } else {
+            callback(null, result);
+        }
+    });
+};
+
 module.exports = User;

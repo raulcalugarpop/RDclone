@@ -1,7 +1,7 @@
 const basicController = {};
 
 basicController.get = (req, res) => {
-    res.json({
+    res.status(200).json({
         message: 'Welcome to our API'
     });
 };
