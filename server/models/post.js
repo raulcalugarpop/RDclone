@@ -11,6 +11,8 @@ const postSchema = new Schema({
     isDeleted: { type: Boolean, default: false },
     createdAt: { type: Date, default: Date.now },
     creator: { type: Schema.ObjectId, ref: 'User'},
+    voteAmount: { type: Number, default: 0},
+    voters: [{ type: Schema.ObjectId, ref: 'User' }],
     comments: [ { type: Schema.ObjectId, ref: 'Comment' } ]
 });
 

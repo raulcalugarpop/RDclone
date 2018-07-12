@@ -1,6 +1,7 @@
 const config = require('../config/config');
 const db = require('../models');
 const jwt = require('jsonwebtoken');
+const nodeMailer = require('nodemailer');
 
 const authController = {};
 

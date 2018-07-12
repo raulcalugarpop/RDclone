@@ -42,7 +42,8 @@ routes.post('/posts', authCheck, postController.create);
 routes.get('/posts/:id', authCheck, postController.findOne);
 routes.put('/posts/:id', authCheck, postController.update);
 routes.delete('/posts/:id', authCheck, postController.delete);
-routes.post('/posts/:id/vote', authCheck, postController.vote);
+routes.post('/posts/:id/like', authCheck, postController.like);
+routes.delete('/posts/:id/dislike', authCheck, postController.dislike);
 
 // Comment CRUD
 routes.get('/comments', authCheck, commentController.findAll);
@@ -50,6 +51,7 @@ routes.post('/comments', authCheck, commentController.create);
 routes.get('/comments/:id', authCheck, commentController.findOne);
 routes.put('/comments/:id', authCheck, commentController.update);
 routes.delete('/comments/:id', authCheck, commentController.delete);
+
 
 // User CRUD
 routes.get('/users', authCheck, userController.findAll);
