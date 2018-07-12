@@ -7,34 +7,34 @@ const basicController = require('../controllers/basicController');
 const userController = require('../controllers/userController');
 const postController = require('../controllers/postController');
 const commentController = require('../controllers/commentController');
-const deleteController = require('../controllers/deleteController');
+const authController = require('../controllers/authController');
 
 /// Basic routes
 routes.get('/', basicController.get);
 
 /// User routes
-routes.post('/register', userController.register);
-routes.post('/login', userController.login);
+// routes.post('/register', userController.register);
+// routes.post('/login', userController.login);
 
 /// Post routes
-routes.post('/newpost', authCheck, postController.post);
-routes.get('/posts', authCheck, postController.GetAll);
+// routes.post('/newpost', authCheck, postController.post);
+// routes.get('/posts', authCheck, postController.GetAll);
 
 /// Delete routes
-routes.delete('/:userId', authCheck, deleteController.delete);
+// routes.delete('/:userId', authCheck, deleteController.delete);
 
 /// Comment routes
-routes.post('/comment', authCheck, commentController.post);
+// routes.post('/comment', authCheck, commentController.post);
 
 
-/*
+
 // TODO
 
 // Auth
 routes.post('/register', authController.register);
 routes.post('/login', authController.login);
-router.post('/forgotPassword', authController.sendPasswordReset);
-router.post('/resetPassword/:token', authController.resetPassword);
+routes.post('/forgotPassword', authController.sendPasswordReset);
+routes.post('/resetPassword/:token', authController.resetPassword);
 
 // Post CRUD
 routes.get('/posts', authCheck, postController.findAll);
@@ -58,6 +58,6 @@ routes.get('/users/:id', authCheck, userController.findOne);
 routes.put('/users/:id', authCheck, userController.update);
 routes.delete('/users/:id', authCheck, userController.delete);
 
-*/
+
 
 module.exports = routes;

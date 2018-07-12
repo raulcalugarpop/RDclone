@@ -5,87 +5,35 @@ const jwt = require('jsonwebtoken');
 const userController = {};
 
 
-/// SIGN UP / REGISTER
-userController.register = (req, res) => {
-    db.User.find( { $or: [{email: req.body.email }, { username: req.body.username }] })
-    .exec()
-    .then( (user) => {
-        if (user.length >= 1) {
-            console.log('register failed. email or username already taken');
-            res.status(400).json({
-                message: "email or username already taken"
-            });
-        } else {
-                const { username, email, password, firstName, lastName } = req.body;
+userController.findAll = (req, res, next) => {
+    res.status(200).json({ message: 'find all users still to do...' });
+};
 
-                const user = new db.User({
-                    username,
-                    password,
-                    email,
-                    firstName,
-                    lastName
-                });
-    
-                user
-                .save()
-                .then( (newUser) => {
-                    console.log('user saved');
-                    res.status(200).json({
-                        success: true,
-                        data: newUser
-                    });
-                })
-                .catch((err) => {
-                    res.status(500).json({
-                        message: err.message
-                    });
-                });
-            }
+userController.create = (req, res, next) => {
+    res.status(200).json({ message: 'create user still to do...' });
+};
+
+userController.findOne = (req, res, next) => {
+    res.status(200).json({ message: 'find one user still to do...' });
+};
+
+userController.update = (req, res, next) => {
+    res.status(200).json({ message: 'update user still to do...' });
+};
+
+userController.delete = (req, res) => {
+
+    db.User.deleteOne({ _id: req.params.userId })
+    .exec()
+    .then( () => {
+        res.status(200).json({
+            message: 'deleted user'
+        });
     })
     .catch((err) => {
         res.status(500).json({
-            message: err.message
+            message: err
         });
-    })
-};
-
-
-/// LOGIN / SIGN IN
-userController.login = (req, res) => {
-    db.User.findOne( { $or: [{email: req.body.email }, { username: req.body.username }] })
-    .exec()
-    .then( (user) => {
-        if (!user) {
-            res.status(401).json({
-                message: "invalid username or email"
-            });
-        } else {
-            console.log('user found, checking password');
-
-            db.User.comparePassword(req.body.password, user.password, (err, result) => {
-                if (err) {
-                    res.status(500).json({
-                        message: err
-                    });
-                }
-                else if (!result) {
-                    console.log('password fail');
-                    res.status(401).json({
-                        message: 'incorrect password'
-                    });
-                }
-                else if (result){
-                    console.log('password correct');
-
-                    const returnedToken = jwt.sign( { id: user._id }, config.jwt.secret, { expiresIn: '1h'} );
-
-                    res.status(200).json({
-                        message: 'login success',
-                        token: returnedToken
-                    });
-                };
-            });
-        }
     });
 };
 
