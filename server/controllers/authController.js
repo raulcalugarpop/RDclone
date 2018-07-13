@@ -1,7 +1,8 @@
 const config = require('../config/config');
 const db = require('../models');
 const jwt = require('jsonwebtoken');
-const nodeMailer = require('nodemailer');
+const EmailSenderComponent = require('../components/emailSenderComponent');
+const emailSenderComponent = new EmailSenderComponent();
 
 const authController = {};
 
@@ -92,12 +93,100 @@ authController.login = (req, res) => {
 
 // FORGOT PASSWORD
 authController.sendPasswordReset = (req, res, next) => {
-    res.status(200).json({ message: 'send password reset still to do...' });
+
+    db.User.findOne( { email: res.body.email }).exec().then( (foundEmail) => {
+        if(foundEmail) {
+            let token = jwt.sign( { id: user.email }, config.jwt.secret, { expiresIn: '1h'} );
+            emailSenderComponent.sendResetPromise( { token: token, user: user })
+                .then((info)=>{
+                    res.status(200).json({
+                        message: 'success'
+                    });
+                })
+                .catch((err) => {
+                    res.status(500).json({
+                        message: err.message
+                    });
+                });
+        } else {
+            console.log('email not found');
+            res.status(401).json({
+                message: 'email does not exist'
+            });
+        }
+    }).catch((err) => {
+        res.status(500).json({
+            message: err.message
+        });
+    });
 };
+// db.User.findOne( { email: res.body.email }).exec((error,foundEmail)=>{
+//     if(error){
+//         return res.status(500).json({
+//             message: error.message
+//         });
+//     }
+//     if(foundEmail) {
+//         let token = jwt.sign( { id: user.email }, config.jwt.secret, { expiresIn: '1h'} );
+//         emailSenderComponent.sendReset( { token: token, user: user }, (error) => {
+//             if (error){
+//                 return res.status(500).json({
+//                     message: error.message
+//                 })
+//             }
+//             res.status(200).json({
+//                 message: 'success'
+//             });
+//         });
+//     } else {
+//         console.log('email not found');
+//         res.status(401).json({
+//             message: 'email does not exist'
+//         });
+//     }
+// })
 
 // CLICK TO RESET PASSWORD
-authController.resetPassword = (req, res, next) => {
-    res.status(200).json({ message: 'reset password still to do...' });
+authController.resetPassword = (req, res) => {
+
+    jwt.verify(req.params.token, config.jwt.secret, (err, decoded) => {
+        if (err) {
+            return res.status(500).json({
+                message: 'token invalid or expired'
+            });
+        } else if (decoded) {
+            let newPassword = req.body.password;
+            let confirmPassword = req.body.confirmPassword;
+
+            if (newPassword === confirmPassword) {
+                user.password = newPassword;
+                user.save().then( () => {
+                    console.log('password change success');
+
+                    emailSenderComponent.resetConfirm({user: user},(err)=>{
+                        if(err){
+                            return res.status(500).json({
+                                message: err.message
+                            });
+                        }
+                        return res.status(200).json({
+                            success: true,
+                            message: 'password updated'
+                        });
+                    });
+                })
+            } else {
+                return res.status(500).json({
+                message: 'passwords does not match'
+            });
+
+            }
+        } else {
+            return res.status(500).json({
+                message: 'token invalid or expired'
+            });
+        }
+    });
 };
 
 module.exports = authController;

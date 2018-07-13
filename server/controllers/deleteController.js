@@ -4,7 +4,7 @@ const deleteController = {};
 
 deleteController.delete = (req, res) => {
 
-    db.User.deleteOne({ _id: req.params.userId })
+    db.User.deleteOne({ _id: req.params.id })
     .exec()
     .then( () => {
         res.status(200).json({

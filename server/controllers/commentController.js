@@ -6,7 +6,7 @@ const commentController = {};
 
 
 // FIND ALL COMMENTS
-commentController.findAll = (req, res, next) => {
+commentController.findAll = (req, res) => {
     db.Post.find({}).populate({
         path: '_creator',
         select: 'username createdAt -_id' ////////////////////////////// ???????????????????
@@ -15,7 +15,7 @@ commentController.findAll = (req, res, next) => {
             success: true,
             data: comments
         });
-        }).catch( (err) => {
+    }).catch( (err) => {
         return res.render(500).json({
             message: err
         });
@@ -24,20 +24,17 @@ commentController.findAll = (req, res, next) => {
 
 
 // NEW COMMENT
-commentController.create = (req, res, next) => {
+commentController.create = (req, res) => {
 
-    const {
-        text,
-        postId
-    } = req.body;
+    const { text } = req.body;
 
     const comment = new db.Comment({
         text,
         _creator: req.user._id,
-        post: postId
+        postId: req.Post._id
     });
 
-    comment.save().then( () => {
+    comment.save().then( (comment) => {
                 return res.status(200).json({
                 success: true,
                 data: comment
@@ -55,7 +52,7 @@ commentController.create = (req, res, next) => {
 // FIND ONE COMMENT
 commentController.findOne = (req, res, next) => {
 
-    db.Post.Comment.findOne({ foundComment: req.params._id }).exec()
+    db.Comments.findOne({ _id: req.params.id }).exec() ///////////////////////// todo
     .then( (foundComment) => {
         res.return(200).json({
             message: foundComment
@@ -67,7 +64,7 @@ commentController.findOne = (req, res, next) => {
 // EDIT COMMENT
 commentController.update = (req, res, next) => {
 
-    db.Comment.findOneAndUpdate({ found: req.params._id }, { text: req.body.text }).exec().then( (text) => {
+    db.Comments.findOneAndUpdate({ _id: req.params.id }, { text: req.body.text }).exec().then( (text) => {
         res.status(200).json({
             message: text
         }).catch( (err) => {
@@ -82,7 +79,7 @@ commentController.update = (req, res, next) => {
 // DELETE COMMENT
 commentController.delete = (req, res, next) => {
     
-    db.Comment.findOneAndUpdate( { result: req.params._id }, { isDeleted: true }).exec()
+    db.Comments.findOneAndUpdate( { _id: req.params.id }, { isDeleted: true }).exec()
     .then( () => {
         return res.status(200).json({
             success: true,

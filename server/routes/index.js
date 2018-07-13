@@ -31,34 +31,34 @@ routes.get('/', basicController.get);
 // TODO
 
 // Auth
-routes.post('/register', authController.register);
-routes.post('/login', authController.login);
-routes.post('/forgotPassword', authController.sendPasswordReset);
-routes.post('/resetPassword/:token', authController.resetPassword);
+routes.post('/register', authController.register);                      // OK
+routes.post('/login', authController.login);                            // OK
+routes.post('/forgotPassword', authController.sendPasswordReset);       // 
+routes.post('/resetPassword/:token', authController.resetPassword);     //
 
 // Post CRUD
-routes.get('/posts', authCheck, postController.findAll);
-routes.post('/posts', authCheck, postController.create);
-routes.get('/posts/:id', authCheck, postController.findOne);
-routes.put('/posts/:id', authCheck, postController.update);
-routes.delete('/posts/:id', authCheck, postController.delete);
-routes.post('/posts/:id/like', authCheck, postController.like);
-routes.delete('/posts/:id/dislike', authCheck, postController.dislike);
+routes.get('/posts', authCheck, postController.findAll);                //
+routes.post('/posts', authCheck, postController.create);                // OK
+routes.get('/posts/:id', authCheck, postController.findOne);            //
+routes.put('/posts/:id', authCheck, postController.update);             //
+routes.delete('/posts/:id', authCheck, postController.delete);          //
+routes.post('/posts/:id/like', authCheck, postController.like);         //
+routes.delete('/posts/:id/dislike', authCheck, postController.dislike); //
 
 // Comment CRUD
-routes.get('/comments', authCheck, commentController.findAll);
-routes.post('/comments', authCheck, commentController.create);
-routes.get('/comments/:id', authCheck, commentController.findOne);
-routes.put('/comments/:id', authCheck, commentController.update);
-routes.delete('/comments/:id', authCheck, commentController.delete);
+routes.get('/comments', authCheck, commentController.findAll);          //
+routes.post('/comments', authCheck, commentController.create);          // 
+routes.get('/comments/:id', authCheck, commentController.findOne);      //
+routes.put('/comments/:id', authCheck, commentController.update);       //
+routes.delete('/comments/:id', authCheck, commentController.delete);    //
 
 
 // User CRUD
-routes.get('/users', authCheck, userController.findAll);
-routes.post('/users', authCheck, userController.create);
-routes.get('/users/:id', authCheck, userController.findOne);
-routes.put('/users/:id', authCheck, userController.update);
-routes.delete('/users/:id', authCheck, userController.delete);
+routes.get('/users', authCheck, userController.findAll);                // OK
+routes.post('/users', authCheck, userController.create);                // OK
+routes.get('/users/:id', authCheck, userController.findOne);            // OK
+routes.put('/users/:id', authCheck, userController.update);             // OK
+routes.delete('/users/:id', authCheck, userController.delete);          // OK
 
 
 
