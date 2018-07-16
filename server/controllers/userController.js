@@ -6,7 +6,7 @@ const userController = {};
 
 userController.findAll = (req, res) => {
 
-    db.User.find( { $or: [ { isDeleted: false } ] } )
+    db.User.find( { isDeleted: false } )
     .exec()
     .then( (users) => {
         const userList = {};
