@@ -9,13 +9,7 @@ userController.findAll = (req, res) => {
     db.User.find( { isDeleted: false } )
     .exec()
     .then( (users) => {
-        const userList = {};
-        users.forEach( (user) => {
-            userList[user._id] = req.user.username;
-        });
-        return res.status(200).json({
-            message: userList
-        });
+        return res.status(200).json(users);
     }).catch((err) => {
         return res.status(500).json({
             message: err.message
@@ -56,9 +50,7 @@ userController.findOne = (req, res) => {
     db.User.findOne( { _id: req.params.id })
     .exec()
     .then( (user) => {
-        return res.status(200).json({
-            message: user
-        });
+        return res.status(200).json(user);
     }).catch((err) => {
         return res.status(500).json({
             message: err

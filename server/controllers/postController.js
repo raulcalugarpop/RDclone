@@ -16,10 +16,7 @@ postController.findAll = (req, res) => {
         select: 'text createdAt _creator'
     })
     .then( (posts) => {
-        return res.status(200).json({
-            success: true,
-            data: posts
-        });
+        return res.status(200).json(posts);
         }).catch( (err) => {
         return res.render(500).json({
             message: err
@@ -68,9 +65,7 @@ postController.findOne = (req, res) => {
     db.Post.findOne({ _id: req.params.id })
     .exec()
     .then( (post) => {
-        return res.status(200).json({
-            data: post
-        });;
+        return res.status(200).json(post);;
     })
     .catch( (err) => {
         return res.status(500).json({

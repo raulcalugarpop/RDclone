@@ -4,6 +4,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const bearerToken = require('express-bearer-token');
+const cors = require('cors');
 const config = require('./config/config');
 const routes = require('./routes');
 
@@ -29,6 +30,7 @@ mongoose.connection.on('error', (err) => {
 const app = express();
 
 /// Middleware
+app.use(cors());
 app.use(bearerToken());
 
 // Body Parser Middleware
