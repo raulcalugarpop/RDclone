@@ -35,30 +35,25 @@ class UsersPage extends Component {
     render() {
             return (
                 <div>
-                    <h1>Users:</h1>
+                    <h2>Users:</h2>
                     <Table>
                         <thead>
                             <tr>
-                                <th>Username</th>
+                                <th>Full Name</th>
                                 <th>email</th>
-                                <th>Name</th>
-                                <th>Joined</th>
                             </tr>
                         </thead>
                         <tbody>
                             {this.state.users.map((user, idx) => {
                                 return (
                                         <tr key={idx}>
-                                            <td>{user.username}</td>
+                                            <td>{user.fullName}</td>
                                             <td>{user.email}</td>
-                                            <td>{user.firstName + ' ' + user.lastName}</td>
-                                            <td>{user.createdAt}</td>
                                         </tr>
                                     
                                 );
                             })
                             }
-
                         </tbody>
                     </Table>
                 </div>

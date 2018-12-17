@@ -8,7 +8,8 @@ const authController = {};
 
 /// REGISTER
 authController.register = (req, res) => {
-    db.User.find( { $or: [{email: req.body.email }, { username: req.body.username }] })
+    //db.User.find( { $or: [{email: req.body.email }, { username: req.body.username }] })
+    db.User.findOne( { email: req.body.email } )
     .exec()
     .then( (user) => {
         if (user.length >= 1) {
@@ -17,14 +18,12 @@ authController.register = (req, res) => {
                 message: "email or username already taken"
             });
         } else {
-                const { username, email, password, firstName, lastName } = req.body;
+                const { username, email, password, firstName, lastName, fullName } = req.body;
 
                 const user = new db.User({
-                    username,
                     password,
                     email,
-                    firstName,
-                    lastName
+                    fullName
                 });
     
                 user
@@ -53,12 +52,16 @@ authController.register = (req, res) => {
 
 /// LOGIN
 authController.login = (req, res) => {
-    db.User.findOne( { $or: [{email: req.body.email }, { username: req.body.username }] })
+    //db.User.findOne( { $or: [{email: req.body.email }, { username: req.body.username }] })
+    db.User.findOne( { email: req.body.email } )
     .exec()
     .then( (user) => {
+        //console.log(user);
+        console.log(req.body);
         if (!user) {
+            console.log('user not found');
             res.status(401).json({
-                message: "invalid username or email"
+                message: "invalid email"
             });
         } else {
             console.log('user found, checking password');

@@ -39,7 +39,7 @@ class Header extends Component {
     if (Auth.isUserAuthenticated()) {
       return (
         <Navbar color="dark" dark expand="md">
-          <NavbarBrand onClick={() => this.props.history.push("/")}>RD Clone</NavbarBrand>
+          <NavbarBrand onClick={() => this.props.history.push("/")}>Proiect WEB</NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
@@ -63,7 +63,7 @@ class Header extends Component {
 
     return (
       <Navbar color="dark" dark expand="md">
-        <NavbarBrand href="/">RD Clone</NavbarBrand>
+        <NavbarBrand href="/">Proiect WEB</NavbarBrand>
         <NavbarToggler onClick={this.toggle} />
         <Collapse isOpen={this.state.isOpen} navbar>
           <Nav className="ml-auto" navbar>

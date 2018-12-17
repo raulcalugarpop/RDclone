@@ -10,7 +10,7 @@ class LoginPage extends Component {
         super(props);
 
         this.state = {
-            username: '',
+            email: '',
             password: ''
         }
     }
@@ -25,13 +25,13 @@ class LoginPage extends Component {
         event.preventDefault();
     
         const data = {
-            username: this.state.username,
+            email: this.state.email,
             password: this.state.password
         };
     
         API.post('/login', data)
         .then(res => {
-            Auth.AuthenticateUser(res.data.token, this.state.username);
+            Auth.AuthenticateUser(res.data.token, this.state.email);
             this.props.history.push('/');
         }).catch(err => {
             console.log(err)
@@ -44,12 +44,12 @@ class LoginPage extends Component {
             <Form onSubmit={this.handleSubmit}>
                 <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
                     <Label for="exampleEmail" className="mr-sm-2">Email</Label>
-                    <Input type="text" name="username" id="login" placeholder="username" onChange={this.handleChange} />
+                    <Input type="text" name="email" id="login" placeholder="e-mail" onChange={this.handleChange} />
                 </FormGroup>
                 <br/>
                 <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
                     <Label for="examplePassword" className="mr-sm-2">Password</Label>
-                    <Input type="password" name="password" id="examplePassword" placeholder="don't tell!" onChange={this.handleChange} />
+                    <Input type="password" name="password" id="examplePassword" placeholder="Password" onChange={this.handleChange} />
                 </FormGroup>
                 <br/>
                 <Button type="submit">Submit</Button>

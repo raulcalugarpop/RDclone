@@ -4,12 +4,12 @@ const bcrypt = require('bcrypt');
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-    username: {
-        type: String,
-        required: true,
-        minlength: [3, 'Username must be 3 characters'],
-        unique: true
-    },
+    // username: {
+    //     type: String,
+    //     required: true,
+    //     minlength: [3, 'Username must be 3 characters'],
+    //     unique: true
+    // },
     email: {
         type: String,
         required: true,
@@ -19,16 +19,21 @@ const userSchema = new Schema({
     password: {
         type: String,
         required: true,
-        minlength: [5, 'Password must be 5 characters']
+        minlength: [5, 'Password must be 5 characters.']
     },
-    firstName: {
+    fullName: {
         type: String,
-        required: true
+        required: true,
+        minlength: [5, 'Password must be 5 characters minimum.']
     },
-    lastName: {
-        type: String,
-        required: true
-    },
+    // firstName: {
+    //     type: String,
+    //     required: true
+    // },
+    // lastName: {
+    //     type: String,
+    //     required: true
+    // },
     role: {
         type: String,
         enum: ['user', 'admin'],

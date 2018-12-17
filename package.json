@@ -5,11 +5,11 @@
   "main": "server/app.js",
   "scripts": {
     "client-install": "npm install --prefix client",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
     "serv": "node server/app.js",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run serv\" \"npm run client\""
+    "dev": "concurrently \"npm run serv\" \"npm run client\"",
+    "test": "nodemon server/app.js"
   },
   "repository": {
     "type": "git",

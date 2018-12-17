@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Container, Row, Col } from 'reactstrap';
 
 import Auth from '../../services/auth';
+//import Graph from '../GraphPage/Graph';
 
 class HomePage extends Component {
 
@@ -21,10 +22,8 @@ class HomePage extends Component {
                 <div>
                     <h1>Welcome, {this.welcomeName}</h1>
                     <Container>
-                        <Row>
-                            <Col>.col</Col>
-                            <Col>.col</Col>
-                        </Row>
+                        <p>News container.</p>
+                        {/* <Graph /> */}
                     </Container>
                 </div>
             );

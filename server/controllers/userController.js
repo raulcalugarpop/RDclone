@@ -20,18 +20,20 @@ userController.findAll = (req, res) => {
 userController.create = (req, res, next) => {
 
     const {
-        username,
+        //username,
         email,
         password,
-        firstName,
-        lastName } = req.body;
+        //firstName,
+        //lastName
+        fullName } = req.body;
     
     const user = new db.User({
-        username,
+        //username,
         email,
         password,
-        firstName,
-        lastName
+        //firstName,
+        //lastName
+        fullName
     });
 
     user.save().then( (newUser) => {
